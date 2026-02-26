@@ -627,18 +627,28 @@ nav {
 }
 
 .work-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 480px 280px;
-  gap: 3px;
-  grid-auto-rows: 320px;
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 6px 12px;
+  margin: 0 -6px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.work-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .wi {
   position: relative;
   overflow: hidden;
-  cursor: none;
   min-height: 320px;
+  flex: 0 0 85vw;
+  max-width: 85vw;
+  scroll-snap-align: start;
+  cursor: auto;
 }
 
 .wi:first-child {
@@ -801,8 +811,38 @@ nav {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
 }
 
+@media (min-width: 861px) {
+  .work-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 480px 280px;
+    gap: 3px;
+    grid-auto-rows: 320px;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+  }
+
+  .work-grid::-webkit-scrollbar {
+    display: initial;
+  }
+
+  .wi {
+    flex: none;
+    cursor: none;
+  }
+
+  .wi:first-child {
+    grid-row: span 2;
+  }
+
+  .work-scroll {
+    display: none;
+  }
+}
+
 .work-scroll {
-  display: none;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 44px;
@@ -1517,34 +1557,6 @@ footer {
   .sv-desc,
   .sv-tag {
     display: none;
-  }
-
-  .work-grid {
-    display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding: 8px 6px 12px;
-    scroll-behavior: smooth;
-  }
-
-  .work-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .wi {
-    flex: 0 0 85vw;
-    min-height: 360px;
-    cursor: auto;
-    scroll-snap-align: start;
-  }
-
-  .wi-inner {
-    min-height: 360px;
-  }
-
-  .work-scroll {
-    display: inline-flex;
   }
 
   .proc-grid {
