@@ -1061,6 +1061,27 @@ nav {
   border: 1.5px solid var(--teal);
 }
 
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-feedback {
+  font-size: 12px;
+  margin-top: 12px;
+  letter-spacing: .02em;
+}
+
+.form-feedback.error {
+  color: #d14b4b;
+}
+
+.form-feedback.success {
+  color: var(--teal);
+}
+
 .fg {
   margin-bottom: 22px;
 }

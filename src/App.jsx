@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+const encode = (data) =>
+  Object.entries(data)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value ?? '')}`)
+    .join('&')
+
 function App() {
   const [chatOpen, setChatOpen] = useState(false)
   const [chatInput, setChatInput] = useState('')
@@ -7,7 +12,7 @@ function App() {
   const [messages, setMessages] = useState([
     { from: 'bot', text: 'Hi — what are you looking to build?' },
   ])
-  const [submitted, setSubmitted] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState('idle')
   const chatListRef = useRef(null)
   const replyTimeoutRef = useRef(null)
 
@@ -143,32 +148,43 @@ function App() {
 
   const submitBrief = (event) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get('name')?.toString().trim() || 'Not provided'
-    const email = formData.get('email')?.toString().trim() || 'Not provided'
-    const company = formData.get('company')?.toString().trim() || 'Not provided'
-    const service = formData.get('service')?.toString().trim() || 'Not provided'
-    const budget = formData.get('budget')?.toString().trim() || 'Not provided'
-    const brief = formData.get('brief')?.toString().trim() || 'Not provided'
+    if (submitStatus === 'submitting') return
 
-    const subject = encodeURIComponent(`New project brief from ${name}`)
-    const body = encodeURIComponent(
-      [
-        'New project inquiry from Gracen Studio website',
-        '',
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Company: ${company}`,
-        `Service: ${service}`,
-        `Budget: ${budget}`,
-        '',
-        'Project brief:',
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    if (formData.get('bot-field')) {
+      return
+    }
+
+    const name = formData.get('name')?.toString().trim() || ''
+    const email = formData.get('email')?.toString().trim() || ''
+    const company = formData.get('company')?.toString().trim() || ''
+    const service = formData.get('service')?.toString().trim() || ''
+    const budget = formData.get('budget')?.toString().trim() || ''
+    const brief = formData.get('brief')?.toString().trim() || ''
+
+    setSubmitStatus('submitting')
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({
+        'form-name': 'project-brief',
+        name,
+        email,
+        company,
+        service,
+        budget,
         brief,
-      ].join('\n'),
-    )
-
-    window.location.href = `mailto:gracenstudio@gmail.com?subject=${subject}&body=${body}`
-    setSubmitted(true)
+      }),
+    })
+      .then(() => {
+        form.reset()
+        setSubmitStatus('success')
+      })
+      .catch(() => {
+        setSubmitStatus('error')
+      })
   }
 
   const scrollToBooking = () => {
@@ -469,11 +485,13 @@ function App() {
         </div>
         <div className="wi">
           <div className="wi-inner">
-            <div className="wi-bg wb3"></div>
+            <video className="wi-video-bg" autoPlay muted loop playsInline preload="auto">
+              <source src="/dashboard.mp4" type="video/mp4" />
+            </video>
             <div className="wi-ov"></div>
             <div className="wi-meta">
               <div className="wi-cat">SaaS Platform</div>
-              <div className="wi-title">Dashboard product</div>
+              <div className="wi-title">Manage your business in one place</div>
             </div>
             <div className="wi-badge">Coming soon</div>
           </div>
@@ -612,7 +630,20 @@ function App() {
             </div>
           </div>
           <div className="bk-form rv d2">
-            <form onSubmit={submitBrief}>
+            <form
+              name="project-brief"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              onSubmit={submitBrief}
+            >
+              <input type="hidden" name="form-name" value="project-brief" />
+              <div className="honeypot">
+                <label>
+                  Do not fill this out if you are human
+                  <input name="bot-field" tabIndex="-1" autoComplete="off" />
+                </label>
+              </div>
               <div className="fg-row">
                 <div className="fg">
                   <label htmlFor="name">Name</label>
@@ -672,9 +703,21 @@ function App() {
                   placeholder="What are you building? Who is it for? Any requirements?"
                 ></textarea>
               </div>
-              <button type="submit" className="f-sub" disabled={submitted}>
-                {submitted ? "✓ Received — we'll be in touch within 24 hours" : 'Send brief →'}
+              <button type="submit" className="f-sub" disabled={submitStatus === 'submitting'}>
+                {submitStatus === 'submitting'
+                  ? 'Sending…'
+                  : submitStatus === 'success'
+                    ? "✓ Received — we'll be in touch within 24 hours"
+                    : 'Send brief →'}
               </button>
+              {submitStatus === 'error' && (
+                <p className="form-feedback error">
+                  Something went wrong. Email gracenstudio@gmail.com while we fix this.
+                </p>
+              )}
+              {submitStatus === 'success' && (
+                <p className="form-feedback success">Thanks! We respond within 24 hours.</p>
+              )}
             </form>
           </div>
         </div>
