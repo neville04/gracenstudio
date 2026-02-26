@@ -14,7 +14,13 @@ function App() {
   ])
   const [submitStatus, setSubmitStatus] = useState('idle')
   const chatListRef = useRef(null)
+  const workGridRef = useRef(null)
   const replyTimeoutRef = useRef(null)
+  const scrollWork = (direction) => {
+    if (!workGridRef.current) return
+    const scrollAmount = workGridRef.current.clientWidth * 0.85
+    workGridRef.current.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' })
+  }
 
   const botReplies = useMemo(
     () => ({
@@ -446,8 +452,17 @@ function App() {
           speak for <em>themselves</em>
         </h2>
       </section>
-      <div className="work-grid">
-        <div className="wi wi-project1">
+      <div className="work-gallery">
+        <button
+          type="button"
+          className="work-scroll prev"
+          aria-label="Scroll projects left"
+          onClick={() => scrollWork(-1)}
+        >
+          ←
+        </button>
+        <div className="work-grid" ref={workGridRef}>
+          <div className="wi wi-project1">
           <a
             href="https://www.pistanero.store"
             target="_blank"
@@ -465,37 +480,46 @@ function App() {
             <div className="wi-badge">Click to view ↗</div>
           </a>
         </div>
-        <div className="wi wi-eventbridge">
-          <a
-            href="https://www.eventbridge.africa/"
-            target="_blank"
-            rel="noreferrer"
-            className="wi-inner wi-link"
-          >
-            <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
-              <source src="/eventbridge.mp4" type="video/mp4" />
-            </video>
-            <div className="wi-ov"></div>
-            <div className="wi-meta">
-              <div className="wi-cat">Event Production</div>
-              <div className="wi-title">How we built an event masterpiece</div>
+          <div className="wi wi-eventbridge">
+            <a
+              href="https://www.eventbridge.africa/"
+              target="_blank"
+              rel="noreferrer"
+              className="wi-inner wi-link"
+            >
+              <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
+                <source src="/eventbridge.mp4" type="video/mp4" />
+              </video>
+              <div className="wi-ov"></div>
+              <div className="wi-meta">
+                <div className="wi-cat">Event Production</div>
+                <div className="wi-title">How we built an event masterpiece</div>
+              </div>
+              <div className="wi-badge">Click to view more ↗</div>
+            </a>
+          </div>
+          <div className="wi">
+            <div className="wi-inner">
+              <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
+                <source src="/dashboard.mp4" type="video/mp4" />
+              </video>
+              <div className="wi-ov"></div>
+              <div className="wi-meta">
+                <div className="wi-cat">SaaS Platform</div>
+                <div className="wi-title">Manage your business in one place</div>
+              </div>
+              <div className="wi-badge">Coming soon</div>
             </div>
-            <div className="wi-badge">Click to view more ↗</div>
-          </a>
-        </div>
-        <div className="wi">
-          <div className="wi-inner">
-            <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
-              <source src="/dashboard.mp4" type="video/mp4" />
-            </video>
-            <div className="wi-ov"></div>
-            <div className="wi-meta">
-              <div className="wi-cat">SaaS Platform</div>
-              <div className="wi-title">Manage your business in one place</div>
-            </div>
-            <div className="wi-badge">Coming soon</div>
           </div>
         </div>
+        <button
+          type="button"
+          className="work-scroll next"
+          aria-label="Scroll projects right"
+          onClick={() => scrollWork(1)}
+        >
+          →
+        </button>
       </div>
 
       <section className="s white-bg" id="process">
