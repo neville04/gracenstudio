@@ -223,12 +223,12 @@ function App() {
           <div className="hero-carousel-track">
             <img src="/hero_image1.webp" alt="" className="hero-carousel-image" />
             <img src="/hero_image2.png" alt="" className="hero-carousel-image" />
-            <video className="hero-carousel-video" autoPlay muted loop playsInline preload="auto">
+            <video className="hero-carousel-video" autoPlay muted loop playsInline preload="metadata">
               <source src="/hero_video.mp4" type="video/mp4" />
             </video>
             <img src="/hero_image1.webp" alt="" className="hero-carousel-image" />
             <img src="/hero_image2.png" alt="" className="hero-carousel-image" />
-            <video className="hero-carousel-video" autoPlay muted loop playsInline preload="auto">
+            <video className="hero-carousel-video" autoPlay muted loop playsInline preload="metadata">
               <source src="/hero_video.mp4" type="video/mp4" />
             </video>
           </div>
@@ -454,7 +454,7 @@ function App() {
             rel="noreferrer"
             className="wi-inner wi-link"
           >
-            <video className="wi-video-bg" autoPlay muted loop playsInline preload="auto">
+            <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
               <source src="/pistanero.mp4" type="video/mp4" />
             </video>
             <div className="wi-ov"></div>
@@ -472,7 +472,7 @@ function App() {
             rel="noreferrer"
             className="wi-inner wi-link"
           >
-            <video className="wi-video-bg" autoPlay muted loop playsInline preload="auto">
+            <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
               <source src="/eventbridge.mp4" type="video/mp4" />
             </video>
             <div className="wi-ov"></div>
@@ -485,7 +485,7 @@ function App() {
         </div>
         <div className="wi">
           <div className="wi-inner">
-            <video className="wi-video-bg" autoPlay muted loop playsInline preload="auto">
+            <video className="wi-video-bg" autoPlay muted loop playsInline preload="metadata">
               <source src="/dashboard.mp4" type="video/mp4" />
             </video>
             <div className="wi-ov"></div>
