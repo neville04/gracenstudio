@@ -19,6 +19,7 @@ const encode = (data) =>
     .join('&')
 
 function App() {
+  const [navOpen, setNavOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatInput, setChatInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -139,6 +140,35 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    document.body.classList.toggle('nav-open', navOpen)
+    return () => {
+      document.body.classList.remove('nav-open')
+    }
+  }, [navOpen])
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 860) {
+        setNavOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setNavOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   const getReply = (text) => {
     const message = text.toLowerCase()
     if (/hi|hello|hey/.test(message)) return botReplies.hello
@@ -210,35 +240,58 @@ function App() {
     document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const closeNav = () => setNavOpen(false)
+
+  const toggleNav = () => setNavOpen((prev) => !prev)
+
   return (
     <>
       <div className="cursor" id="cur"></div>
       <div className="cursor-ring" id="ring"></div>
 
       <nav>
-        <a href="#" className="nav-logo">
+        <a href="#" className="nav-logo" onClick={closeNav}>
           Gracen <em>Studio</em>
         </a>
-        <div className="nav-right">
+        <div className={`nav-right ${navOpen ? 'open' : ''}`}>
           <ul className="nav-links">
             <li>
-              <a href="#services">Services</a>
+              <a href="#services" onClick={closeNav}>
+                Services
+              </a>
             </li>
             <li>
-              <a href="#work">Work</a>
+              <a href="#work" onClick={closeNav}>
+                Work
+              </a>
             </li>
             <li>
-              <a href="#team">Team</a>
+              <a href="#team" onClick={closeNav}>
+                Team
+              </a>
             </li>
             <li>
-              <a href="#pricing">Pricing</a>
+              <a href="#pricing" onClick={closeNav}>
+                Pricing
+              </a>
             </li>
           </ul>
-          <a href="#booking" className="nav-cta">
+          <a href="#booking" className="nav-cta" onClick={closeNav}>
             Start a project
           </a>
         </div>
+        <button
+          type="button"
+          className={`nav-toggle ${navOpen ? 'open' : ''}`}
+          aria-label={navOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={navOpen}
+          onClick={toggleNav}
+        >
+          <span></span>
+          <span></span>
+        </button>
       </nav>
+      <div className={`nav-overlay ${navOpen ? 'show' : ''}`} onClick={closeNav}></div>
 
       <section className="hero">
         <div className="hero-carousel" aria-hidden="true">
