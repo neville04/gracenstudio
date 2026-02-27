@@ -1,5 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+const teamMembers = [
+  {
+    name: 'Neville Akoragye',
+    role: 'Team Lead & Founder',
+    skills: ['Project management', 'React (JS / TSX)', 'Vite'],
+    githubs: [
+      { label: '@neville03', url: 'https://github.com/neville03' },
+      { label: '@neville04', url: 'https://github.com/neville04' },
+    ],
+    photo: '/neville.JPG',
+  },
+]
+
 const encode = (data) =>
   Object.entries(data)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value ?? '')}`)
@@ -215,6 +228,9 @@ function App() {
               <a href="#work">Work</a>
             </li>
             <li>
+              <a href="#team">Team</a>
+            </li>
+            <li>
               <a href="#pricing">Pricing</a>
             </li>
           </ul>
@@ -375,6 +391,40 @@ function App() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="s" id="team">
+        <div className="s-label rv">Team</div>
+        <h2 className="s-title rv d1">
+          People behind
+          <br />
+          <em>Gracen Studio</em>
+        </h2>
+        <div className="team-grid">
+          {teamMembers.map((member) => (
+            <div className="tm-card rv d1" key={member.name}>
+              <div className="tm-photo">
+                <img src={member.photo} alt={`Portrait of ${member.name}`} loading="lazy" />
+              </div>
+              <div className="tm-info">
+                <div className="tm-name">{member.name}</div>
+                <div className="tm-role">{member.role}</div>
+                <ul className="tm-skills">
+                  {member.skills.map((skill) => (
+                    <li key={`${member.name}-${skill}`}>{skill}</li>
+                  ))}
+                </ul>
+                <div className="tm-links">
+                  {member.githubs.map((profile) => (
+                    <a key={profile.url} href={profile.url} target="_blank" rel="noreferrer">
+                      {profile.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
